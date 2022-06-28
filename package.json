@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/Shadeslayer10/ticket-tool#readme",
   "devDependencies": {
-    "eslint": "8.13.0",
+    "eslint": "8.18.0",
     "node": "17.9.1"
   },
   "dependencies": {
