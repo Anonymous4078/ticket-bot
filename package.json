@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/Shadeslayer10/ticket-tool#readme",
   "devDependencies": {
-    "eslint": "^8.13.0",
-    "node": "^17.7.2"
+    "eslint": "8.13.0",
+    "node": "17.7.2"
   },
   "dependencies": {
     "@discordjs/rest": "^0.3.0",
