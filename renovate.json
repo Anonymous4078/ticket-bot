@@ -1,0 +1,16 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":assignAndReview(@Anonymous4078)",
+    ":disableRateLimiting",
+    ":followTag(discord.js, dev)",
+    ":semanticCommitTypeAll(chore)",
+    "default:automergeDigest"
+  ],
+  "labels": ["dependencies"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true
+  }
+}
