@@ -10,8 +10,12 @@ const {
 const configModel = require('../../models/guildConfig');
 
 module.exports = {
-  id: 'create',
-  interactionRun: async (interaction) => {
+  data: {
+    name: 'create',
+    description: 'Create a new ticket.',
+    dm_permission: false,
+  },
+  chatInputRun: async (interaction) => {
     await interaction.deferReply({ ephemeral: true });
 
     const { client, guild, user } = interaction;

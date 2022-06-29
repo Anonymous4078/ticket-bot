@@ -7,17 +7,22 @@ const {
 const collection = require('../../models/ticket');
 
 module.exports = {
-  id: 'close',
-  interactionRun: async (interaction) => {
+  data: {
+    name: 'close',
+    description: 'Close a ticket',
+    dm_permission: false,
+  },
+  chatInputRun: async (interaction) => {
+    await interaction.deferReply();
+
     const { client, channel } = interaction;
 
     const data = await collection.findOne({ channelId: channel.id });
 
     if (data.closed) {
-      return interaction.reply({
-        content: `${client.config.emojis.cross} | This ticket has been already closed.`,
-        ephemeral: true,
-      });
+      return interaction.editReply(
+        `${client.config.emojis.cross} | This ticket has been already closed.`,
+      );
     }
 
     await channel.permissionOverwrites.create(data.userId, {

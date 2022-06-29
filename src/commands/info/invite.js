@@ -28,7 +28,13 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setTitle(`Invite ${client.user.username}`)
       .setDescription(
-        `• ${hyperlink('Click here', invite)} to add me to any of your servers. \n• Join ${hyperlink('Suppirt server', 'https://discord.gg/5n3pb4PwFN')} if you need support with the bot.`,
+        `• ${hyperlink(
+          'Click here',
+          invite,
+        )} to add me to any of your servers. \n• Join ${hyperlink(
+          'Support server',
+          'https://discord.gg/5n3pb4PwFN',
+        )} if you need support with the bot.`,
       )
       .setColor('Blurple')
       .setTimestamp();

@@ -18,7 +18,10 @@ module.exports = {
         required: true,
       },
     ],
+    dm_permission: false,
   },
+  requiredUserPermissions: ['Administrator'],
+
   chatInputRun: async (interaction) => {
     await interaction.deferReply();
 

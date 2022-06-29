@@ -16,6 +16,7 @@ module.exports = {
       if (!command) return;
 
       if (
+        command.requiredUserPermissions &&
         !interaction.member.permissions.has(command.requiredUserPermissions)
       ) {
         return interaction.reply(

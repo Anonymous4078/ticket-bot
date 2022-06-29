@@ -23,7 +23,6 @@ const client = new Client({
 });
 client.interactions = new Collection();
 client.commands = new Collection();
-client.sub_commands = new Collection();
 client.cooldowns = new Collection();
 client.config = require('./config');
 client.logger = require('./logger');
@@ -62,21 +61,15 @@ readdirSync('./src/interactions/').forEach((dir) => {
 });
 
 const commands = [];
-const clientId = '991007353296011334';
 readdirSync('./src/commands/').forEach((dir) => {
   const commandFiles = readdirSync(`./src/commands/${dir}/`).filter((file) =>
     file.endsWith('.js'),
   );
   for (const file of commandFiles) {
     const command = require(`../src/commands/${dir}/${file}`);
-    if (command.subCommand) {
-      client.logger.info(`Sub Command - Loaded ${command.name}`);
-      client.sub_commands.set(command.name, command);
-    } else {
-      commands.push(command.data);
-      client.logger.info(`Command - Loaded ${command.data.name}`);
-      client.commands.set(command.data.name, command);
-    }
+    commands.push(command.data);
+    client.logger.info(`Command - Loaded ${command.data.name}`);
+    client.commands.set(command.data.name, command);
   }
 });
 
@@ -85,7 +78,7 @@ const rest = new REST({ version: '10' }).setToken(
 );
 (async () => {
   await rest
-    .put(Routes.applicationCommands(clientId), {
+    .put(Routes.applicationCommands(client.config.clientId), {
       body: commands,
     })
     .catch((error) => client.logger.error(error))
