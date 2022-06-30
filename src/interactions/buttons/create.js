@@ -33,6 +33,7 @@ module.exports = {
     }
 
     const data = await configModel.findOne({ guildId: guild.id });
+    if (!data) return;
     const tickets = await ticketModel.find({
       guildId: guild.id,
       userId: user.id,
@@ -63,6 +64,19 @@ module.exports = {
         deny: ['ViewChannel'],
         type: 'role',
       },
+      {
+        id: client.user.id,
+        allow: [
+          'EmbedLinks',
+          'ManageChannels',
+          'ManageMessages',
+          'ReadMessageHistory',
+          'SendMessages',
+          'ViewChannel',
+        ],
+        type: 'member',
+      },
+
       {
         id: user.id,
         allow: [

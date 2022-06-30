@@ -9,7 +9,6 @@ module.exports = {
     description: 'Delete a ticket.',
     dm_permission: false,
   },
-
   chatInputRun: async (interaction) => {
     await interaction.deferReply({ ephemeral: true });
     const { client, guild, channel, member } = interaction;
@@ -27,6 +26,12 @@ module.exports = {
     }
 
     const data = await configModel.findOne({ guildId: guild.id });
+
+    if (!data) {
+      return interaction.editReply(
+        `${client.config.emojis.cross} | This is not a ticket channel.`,
+      );
+    }
 
     if (
       (data.staffRoleIds?.length &&

@@ -20,43 +20,38 @@ module.exports = {
     ],
     dm_permission: false,
   },
-  requiredUserPermissions: ['Administrator'],
-
+  requiredUserPermissions: ['ManageGuild'],
   chatInputRun: async (interaction) => {
-    await interaction.deferReply();
-
     const { client, guild } = interaction;
-    const role = interaction.options.getMentionable('role');
+    const role = interaction.options.getRole('role');
     const data = await collection.findOne({
       guildId: guild.id,
     });
 
     if (role.managed) {
-      return interaction.editReply(
-        `${client.config.emojis.cross} | You cannot blacklist a integrated role.`,
-      );
+      return interaction.reply({
+        content: `${client.config.emojis.cross} | You cannot blacklist a integrated role.`,
+        ephemeral: true,
+      });
     }
 
     if (data.blackListedRoleIds.includes(role.id)) {
-      return interaction.editReply(
-        `${client.config.emojis.cross} | That role is already blacklisted.`,
-      );
+      return interaction.reply({
+        content: `${client.config.emojis.cross} | That role is already blacklisted.`,
+        ephemeral: true,
+      });
     }
 
     await collection.findOneAndUpdate(
       { guildId: guild.id },
       { $push: { blackListedRoleIds: role.id } },
+      { upsert: true },
     );
 
     const embed = new EmbedBuilder()
-      .setColor('Blurple')
-      .setDescription(
-        `${
-          client.config.emojis.tick
-        } | Successfully blacklisted ${role.toString()}.`,
-      )
-      .setTimestamp();
+      .setColor('Green')
+      .setDescription(`Successfully blacklisted ${role.toString()}.`);
 
-    await interaction.editReply({ embeds: [embed] });
+    await interaction.reply({ embeds: [embed] });
   },
 };

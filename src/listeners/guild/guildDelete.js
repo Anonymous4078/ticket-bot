@@ -5,6 +5,7 @@ const {
   time,
   TimeStampStyles,
 } = require('discord.js');
+const ms = require('pretty-ms');
 
 module.exports = {
   name: 'guildDelete',
@@ -12,6 +13,7 @@ module.exports = {
     const owner = await guild.fetchOwner();
 
     const embed = new EmbedBuilder()
+      .setColor('Blurple')
       .setTitle('Joined a new server')
       .setThumbnail(guild.iconURL())
       .setTimestamp()
@@ -23,9 +25,12 @@ ${bold('Name:')} ${guild.name}
 ${bold('ID:')} ${guild.id} 
 ${bold('Members:')} ${guild.memberCount}
 ${bold('Created At:')} ${time(
-            guild.createdTimestamp,
+            Math.round(guild.createdTimestamp / 1000),
             TimeStampStyles.LongDateTime,
-          )} ( ${time(guild.createdTimestamp, TimeStampStyles.RelativeTime)} )`,
+          )} ( ${ms(new Date() - guild.createdTimestamp, {
+            verbose: true,
+            showMilliseconds: false,
+          })} ago )`,
           inline: true,
         },
         {

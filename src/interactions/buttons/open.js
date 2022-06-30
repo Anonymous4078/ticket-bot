@@ -47,7 +47,7 @@ module.exports = {
       )
       .setColor('Blurple');
 
-    await channel.send({ embeds: [embed] });
+    await interaction.channel.send({ embeds: [embed] });
 
     await ticketModel.findOneAndUpdate(
       { channelId: channel.id },

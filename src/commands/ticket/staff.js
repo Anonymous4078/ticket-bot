@@ -40,35 +40,35 @@ module.exports = {
     ],
     dm_permission: false,
   },
-  requiredUserPermissions: ['Administrator'],
-
+  requiredUserPermissions: ['ManageGuild'],
   chatInputRun: async (interaction) => {
-    await interaction.deferReply();
-
     const { client, guild } = interaction;
     const subCommand = interaction.options.getSubcommand();
     if (subCommand === 'add') {
-      const role = interaction.options.getMentionable('role');
+      const role = interaction.options.getRole('role');
 
       const data = await collection.findOne({
         guildId: guild.id,
       });
 
       if (role.managed) {
-        return interaction.editReply(
-          `${client.config.emojis.cross} | You cannot add a integrated role to the staff roles.`,
-        );
+        return interaction.reply({
+          content: `${client.config.emojis.cross} | You cannot add a integrated role to the staff roles.`,
+          ephemeral: true,
+        });
       }
 
       if (data.config.staffRoleIds.includes(role.id)) {
-        return interaction.editReply(
-          `${client.config.emojis.cross} | That role is already a staff role.`,
-        );
+        return interaction.reply({
+          content: `${client.config.emojis.cross} | That role is already a staff role.`,
+          ephemeral: true,
+        });
       }
 
       await collection.findOneAndUpdate(
         { guildId: guild.id },
         { $push: { 'config.staffRoleIds': role.id } },
+        { upsert: true },
       );
 
       const embed = new EmbedBuilder()
@@ -79,7 +79,7 @@ module.exports = {
           } | Successfully added ${role.toString()} to the staff role.`,
         );
 
-      await interaction.editReply({ embeds: [embed] });
+      await interaction.reply({ embeds: [embed] });
     } else {
       const role = interaction.options.getMentionable('role');
       const data = await collection.findOne({
@@ -87,15 +87,17 @@ module.exports = {
       });
 
       if (role.managed) {
-        return interaction.editReply(
-          `${client.config.emojis.cross} | You cannot remove a integrated role from the staff roles.`,
-        );
+        return interaction.reply({
+          content: `${client.config.emojis.cross} | You cannot remove a integrated role from the staff roles.`,
+          ephemeral: true,
+        });
       }
 
       if (!data.config.staffRoleIds.includes(role.id)) {
-        return interaction.editReply(
-          `${client.config.emojis.cross} | That role is not a staff role.`,
-        );
+        return interaction.reply({
+          content: `${client.config.emojis.cross} | That role is not a staff role.`,
+          ephemeral: true,
+        });
       }
 
       await collection.findOneAndUpdate(
@@ -111,7 +113,7 @@ module.exports = {
           } | Successfully removed ${role.toString()} from the staff role.`,
         );
 
-      await interaction.editReply({ embeds: [embed] });
+      await interaction.reply({ embeds: [embed] });
     }
   },
 };

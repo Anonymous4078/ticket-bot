@@ -35,7 +35,7 @@ module.exports = {
       )
       .setColor('Blurple');
 
-    await interaction.channel.send({ embeds: [embed] });
+    await interaction.reply({ embeds: [embed] });
 
     const control_embed = new EmbedBuilder()
       .setTitle('Support team ticket controls')

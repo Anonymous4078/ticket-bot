@@ -8,19 +8,23 @@ const {
 module.exports = {
   data: {
     name: 'invite',
-    description: 'Invite the bot.',
+    description: 'Provides the invite link of the bot.',
   },
   chatInputRun: async (interaction) => {
     await interaction.deferReply({ ephemeral: true });
 
     const { client } = interaction;
+
     const invite = client.generateInvite({
       scopes: [OAuth2Scopes.ApplicationsCommands, OAuth2Scopes.Bot],
       permissions: [
         PermissionFlagsBits.EmbedLinks,
-        PermissionFlagsBits.SendMessages,
         PermissionFlagsBits.ManageChannels,
+        PermissionFlagsBits.ManageMessages,
+        PermissionFlagsBits.ManageRoles,
         PermissionFlagsBits.ReadMessageHistory,
+        PermissionFlagsBits.SendMessages,
+        PermissionFlagsBits.UseExternalEmojis,
         PermissionFlagsBits.ViewChannel,
       ],
     });

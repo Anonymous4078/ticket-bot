@@ -19,9 +19,10 @@ module.exports = {
         command.requiredUserPermissions &&
         !interaction.member.permissions.has(command.requiredUserPermissions)
       ) {
-        return interaction.reply(
-          `${client.config.emojis.cross} | You don't have permissons to use this command.`,
-        );
+        return interaction.reply({
+          content: `${client.config.emojis.cross} | You don't have permissons to use this command.`,
+          ephemeral: true,
+        });
       }
 
       const { cooldowns } = client;

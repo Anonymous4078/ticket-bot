@@ -39,13 +39,14 @@ module.exports = {
             description: 'Maximum number of tickets a user can create.',
             type: ApplicationCommandOptionType.Number,
             required: true,
+            min_value: 1,
           },
         ],
       },
     ],
     dm_permission: false,
   },
-  requiredUserPermissions: ['Administrator'],
+  requiredUserPermissions: ['ManageGuild'],
   chatInputRun: async (interaction) => {
     await interaction.deferReply();
 

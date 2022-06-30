@@ -6,6 +6,7 @@ const {
   channelMention,
   ChannelType,
   EmbedBuilder,
+  underscore,
 } = require('discord.js');
 const configModel = require('../../models/guildConfig');
 
@@ -37,6 +38,12 @@ module.exports = {
     }
 
     const data = await configModel.findOne({ guildId: guild.id });
+    if (!data) {
+      return interaction.editReply(
+        `${client.config.emojis.cross} | Couldn't find the setup for this server, please ask an Admin to create a setup.`,
+      );
+    }
+
     const tickets = await ticketModel.find({
       guildId: guild.id,
       userId: user.id,
@@ -51,11 +58,15 @@ module.exports = {
 
     if (tickets.length > data.config.ticketLimit) {
       return interaction.editReply(
-        `${
-          client.config.emojis.cross
-        } | Ticket limit reached, you already have ${
+        `${client.config.emojis.cross} | Ticket limit reached, you have ${
           tickets.length > 1 ? `${tickets.length} tickets` : 'a ticket'
-        } open in ${tickets.map((ticket) => channelMention(ticket.channelId))}`,
+        } opened out of ${
+          data.config.ticketLimit
+        } ticket allowed for this panel. \n\n${underscore(
+          'Opened tickets:',
+        )} \n• ${tickets
+          .map((ticket) => channelMention(ticket.channelId))
+          .join('\n')}`,
       );
     }
 
@@ -66,6 +77,17 @@ module.exports = {
         id: guild.roles.everyone.id,
         deny: ['ViewChannel'],
         type: 'role',
+      },
+      {
+        id: client.user.id,
+        allow: [
+          'EmbedLinks',
+          'ManageMessages',
+          'ReadMessageHistory',
+          'SendMessages',
+          'ViewChannel',
+        ],
+        type: 'member',
       },
       {
         id: user.id,

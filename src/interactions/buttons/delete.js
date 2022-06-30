@@ -40,7 +40,7 @@ module.exports = {
       .setDescription('Ticket will be deleted in 5 seconds.')
       .setColor('Red');
 
-    await channel.send({ embeds: [embed] });
+    await interaction.reply({ embeds: [embed] });
 
     await setTimeout(5000);
     await channel.delete();

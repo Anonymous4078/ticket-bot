@@ -13,16 +13,22 @@ module.exports = {
     dm_permission: false,
   },
   chatInputRun: async (interaction) => {
-    await interaction.deferReply();
-
     const { client, channel } = interaction;
 
     const data = await collection.findOne({ channelId: channel.id });
 
+    if (!data) {
+      return interaction.reply({
+        content: `${client.config.emojis.cross} | This is not a ticket channel.`,
+        ephemeral: true,
+      });
+    }
+
     if (data.closed) {
-      return interaction.editReply(
-        `${client.config.emojis.cross} | This ticket has been already closed.`,
-      );
+      return interaction.reply({
+        content: `${client.config.emojis.cross} | This ticket has been already closed.`,
+        ephemeral: true,
+      });
     }
 
     await channel.permissionOverwrites.create(data.userId, {
@@ -40,7 +46,7 @@ module.exports = {
       )
       .setColor('Blurple');
 
-    await interaction.channel.send({ embeds: [embed] });
+    await interaction.reply({ embeds: [embed] });
 
     const control_embed = new EmbedBuilder()
       .setTitle('Support team ticket controls')
