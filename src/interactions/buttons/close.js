@@ -10,13 +10,13 @@ module.exports = {
   id: 'close',
   interactionRun: async (interaction) => {
     const { client, channel } = interaction;
+    await interaction.deferReply({ ephemeral: true });
 
     const data = await collection.findOne({ channelId: channel.id });
 
     if (data.closed) {
-      return interaction.reply({
-        content: `${client.config.emojis.cross} | This ticket has been already closed.`,
-        ephemeral: true,
+      return interaction.editReply({
+        content: `${client.config.emojis.cross} | This ticket has been already closed.`
       });
     }
 
@@ -35,7 +35,7 @@ module.exports = {
       )
       .setColor('Blurple');
 
-    await interaction.reply({ embeds: [embed] });
+    await interaction.editReply({ embeds: [embed] });
 
     const control_embed = new EmbedBuilder()
       .setTitle('Support team ticket controls')
